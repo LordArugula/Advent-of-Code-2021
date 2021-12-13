@@ -4,52 +4,73 @@ public static class Day6
 {
     public static void Part1()
     {
-        List<int> lanternfish = GetLanternfishAges();
-        SimulateLanterfish(lanternfish, 80);
+        ulong[] lanternfishAges = GetLanternfishAges();
 
-        Console.WriteLine(lanternfish.Count);
+        SimulateLanternfish(lanternfishAges, 80);
+
+        Console.WriteLine(CountLanternfishes(lanternfishAges));
     }
 
-    private static List<int> GetLanternfishAges()
+    private static ulong CountLanternfishes(ulong[] lanternfishAges)
+    {
+        ulong count = 0;
+        for (int i = 0; i < lanternfishAges.Length; i++)
+        {
+            count += lanternfishAges[i];
+        }
+        return count;
+    }
+
+    private static ulong[] GetLanternfishAges()
     {
         string[] inputs = InputHelper.GetInput(6);
-        List<int> lanternfish = inputs[0]
-            .Split(',')
-            .Select(x => int.Parse(x))
-            .ToList();
-        return lanternfish;
+        var lanternfishAgesInput = inputs[0].Split(',');
+
+        ulong[] lanternfishAges = new ulong[9];
+        for (int i = 0; i < lanternfishAgesInput.Length; i++)
+        {
+            int bucket = lanternfishAgesInput[i] switch
+            {
+                "0" => 0,
+                "1" => 1,
+                "2" => 2,
+                "3" => 3,
+                "4" => 4,
+                "5" => 5,
+                "6" => 6,
+                "7" => 7,
+                "8" => 8,
+                _ => 0,
+            };
+            lanternfishAges[bucket]++;
+        }
+
+        return lanternfishAges;
     }
 
-    private static void SimulateLanterfish(List<int> lanternfish, int days)
+    private static void SimulateLanternfish(ulong[] lanternfish, int days)
     {
         while (days > 0)
         {
             days--;
 
-            int newFish = 0;
-            for (int i = 0; i < lanternfish.Count; i++)
-            {
-                if (lanternfish[i] == 0)
-                {
-                    newFish++;
-                    lanternfish[i] = 7;
-                }
+            ulong newFish = lanternfish[0];
 
-                lanternfish[i]--;
-            }
-
-            for (int i = 0; i < newFish; i++)
+            for (int i = 1; i < 9; i++)
             {
-                lanternfish.Add(8);
+                lanternfish[i - 1] = lanternfish[i];
             }
+            lanternfish[6] += newFish;
+            lanternfish[8] = newFish;
         }
     }
 
     public static void Part2()
     {
-        List<int> lanternfish = GetLanternfishAges();
-        SimulateLanterfish(lanternfish, 256);
+        ulong[] lanternfishAges = GetLanternfishAges();
 
-        Console.WriteLine(lanternfish.Count);
+        SimulateLanternfish(lanternfishAges, 256);
+
+        Console.WriteLine(CountLanternfishes(lanternfishAges));
     }
 }
