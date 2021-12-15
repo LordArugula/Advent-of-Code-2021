@@ -5,46 +5,111 @@ public static class Day14
     public static void Part1()
     {
         string[] inputs = InputHelper.GetInput(14);
+        string polymerAsString = inputs[0];
 
-        LinkedList<char> polymer = new LinkedList<char>(inputs[0]);
+        Dictionary<ElementPair, long> polymer = new Dictionary<ElementPair, long>();
+        Dictionary<char, long> elementCount = new Dictionary<char, long>();
+        for (int i = 0; i < polymerAsString.Length - 1; i++)
+        {
+            char first = polymerAsString[i];
+            char second = polymerAsString[i + 1];
+
+            var pair = new ElementPair(first, second);
+            if (polymer.ContainsKey(pair))
+            {
+                polymer[pair]++;
+            }
+            else
+            {
+                polymer.Add(pair, 1);
+            }
+        }
+
+        foreach (char element in polymerAsString)
+        {
+            if (elementCount.ContainsKey(element))
+            {
+                elementCount[element]++;
+            }
+            else
+            {
+                elementCount.Add(element, 1);
+            }
+        }
 
         IReadOnlyDictionary<ElementPair, char> pairInsertionRules
             = ParsePairInsertionRules(inputs);
 
-        SimulatePairInsertion(polymer, pairInsertionRules, 10);
+        SimulatePairInsertion(polymer, elementCount, pairInsertionRules, 40);
 
-        IOrderedEnumerable<IGrouping<char, char>> orderedElementGroups = polymer
-            .GroupBy(e => e)
-            .OrderByDescending(e => e.Count());
-
-        Console.WriteLine(orderedElementGroups.First().Count() - orderedElementGroups.Last().Count());
+        long max = elementCount.Max(keyPair => keyPair.Value);
+        long min = elementCount.Min(keyPair => keyPair.Value);
+        Console.WriteLine(max - min);
     }
 
-    private static void SimulatePairInsertion(LinkedList<char> polymer, IReadOnlyDictionary<ElementPair, char> pairInsertionRules, int steps)
+    private static void SimulatePairInsertion(Dictionary<ElementPair, long> polymer, Dictionary<char, long> elementCount, IReadOnlyDictionary<ElementPair, char> pairInsertionRules, int steps)
     {
         while (steps > 0)
         {
             steps--;
 
-            LinkedListNode<char> current = polymer.First;
-            if (current == null)
-            {
-                break;
-            }
+            Dictionary<ElementPair, long> pairsToAdd = new Dictionary<ElementPair, long>();
 
-            while (current.Next != null)
+            foreach (KeyValuePair<ElementPair, long> pairCount in polymer)
             {
-                LinkedListNode<char> next = current.Next;
-                char first = current.Value;
-                char second = next.Value;
+                ElementPair pair = pairCount.Key;
+                long count = pairCount.Value;
+                char insertedCharacter = pairInsertionRules[pair];
 
-                if (pairInsertionRules.ContainsKey(new ElementPair(first, second)))
+                if (elementCount.ContainsKey(insertedCharacter))
                 {
-                    char inserted = pairInsertionRules[new ElementPair(first, second)];
-                    polymer.AddAfter(current, inserted);
+                    elementCount[insertedCharacter] += count;
+                }
+                else
+                {
+                    elementCount.Add(insertedCharacter, count);
                 }
 
-                current = next;
+                ElementPair newPair1 = new ElementPair(pair.First, insertedCharacter);
+                ElementPair newPair2 = new ElementPair(insertedCharacter, pair.Second);
+                if (pairsToAdd.ContainsKey(pair))
+                {
+                    pairsToAdd[pair] -= count;
+                }
+                else
+                {
+                    pairsToAdd.Add(pair, -count);
+                }
+
+                if (pairsToAdd.ContainsKey(newPair1))
+                {
+                    pairsToAdd[newPair1] += count;
+                }
+                else
+                {
+                    pairsToAdd.Add(newPair1, count);
+                }
+
+                if (pairsToAdd.ContainsKey(newPair2))
+                {
+                    pairsToAdd[newPair2] += count;
+                }
+                else
+                {
+                    pairsToAdd.Add(newPair2, count);
+                }
+            }
+
+            foreach (KeyValuePair<ElementPair, long> pairCount in pairsToAdd)
+            {
+                if (polymer.ContainsKey(pairCount.Key))
+                {
+                    polymer[pairCount.Key] += pairCount.Value;
+                }
+                else
+                {
+                    polymer.Add(pairCount.Key, pairCount.Value);
+                }
             }
         }
     }
@@ -69,21 +134,47 @@ public static class Day14
 
     public static void Part2()
     {
-
         string[] inputs = InputHelper.GetInput(14);
+        string polymerAsString = inputs[0];
 
-        LinkedList<char> polymer = new LinkedList<char>(inputs[0]);
+        Dictionary<ElementPair, long> polymer = new Dictionary<ElementPair, long>();
+        Dictionary<char, long> elementCount = new Dictionary<char, long>();
+        for (int i = 0; i < polymerAsString.Length - 1; i++)
+        {
+            char first = polymerAsString[i];
+            char second = polymerAsString[i + 1];
+
+            var pair = new ElementPair(first, second);
+            if (polymer.ContainsKey(pair))
+            {
+                polymer[pair]++;
+            }
+            else
+            {
+                polymer.Add(pair, 1);
+            }
+        }
+
+        foreach (char element in polymerAsString)
+        {
+            if (elementCount.ContainsKey(element))
+            {
+                elementCount[element]++;
+            }
+            else
+            {
+                elementCount.Add(element, 1);
+            }
+        }
 
         IReadOnlyDictionary<ElementPair, char> pairInsertionRules
             = ParsePairInsertionRules(inputs);
 
-        SimulatePairInsertion(polymer, pairInsertionRules, 40);
+        SimulatePairInsertion(polymer, elementCount, pairInsertionRules, 40);
 
-        IOrderedEnumerable<IGrouping<char, char>> orderedElementGroups = polymer
-            .GroupBy(e => e)
-            .OrderByDescending(e => e.Count());
-
-        Console.WriteLine(orderedElementGroups.First().Count() - orderedElementGroups.Last().Count());
+        long max = elementCount.Max(keyPair => keyPair.Value);
+        long min = elementCount.Min(keyPair => keyPair.Value);
+        Console.WriteLine(max - min);
     }
 }
 
