@@ -67,7 +67,7 @@ public static class Day12
             return 1;
         }
 
-        if (IsRevisitable(node))
+        if (IsNotRevisitable(node))
         {
             if (visited.Contains(node))
             {
@@ -87,11 +87,11 @@ public static class Day12
         }
 
         visited.Remove(node);
-        
+
         return paths;
     }
 
-    private static bool IsRevisitable(string node) => node.Any(c => char.IsLower(c));
+    private static bool IsNotRevisitable(string node) => node.Any(c => char.IsLower(c));
 
     public static void Part2()
     {
