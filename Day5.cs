@@ -2,19 +2,6 @@
 
 public static class Day5
 {
-    [System.Diagnostics.DebuggerDisplay("({x}, {y})")]
-    private struct Point
-    {
-        public int x;
-        public int y;
-
-        public Point(int x, int y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
     private class LineSegment
     {
         public Point a;
@@ -44,12 +31,12 @@ public static class Day5
 
         public bool IsHorizontal()
         {
-            return a.y == b.y;
+            return a.Y == b.Y;
         }
 
         public bool IsVertical()
         {
-            return a.x == b.x;
+            return a.X == b.X;
         }
 
         public bool IsAxisAligned()
@@ -77,8 +64,8 @@ public static class Day5
 
     private static void DrawLine(Dictionary<Point, int> heatmap, LineSegment lineSegment)
     {
-        float dy = lineSegment.b.y - lineSegment.a.y;
-        float dx = lineSegment.b.x - lineSegment.a.x;
+        float dy = lineSegment.b.Y - lineSegment.a.Y;
+        float dx = lineSegment.b.X - lineSegment.a.X;
 
         int steps = Math.Abs(dx) > Math.Abs(dy) 
             ? (int)Math.Abs(dx) 
@@ -90,8 +77,8 @@ public static class Day5
             return;
         }
 
-        float x = lineSegment.a.x;
-        float y = lineSegment.a.y;
+        float x = lineSegment.a.X;
+        float y = lineSegment.a.Y;
         dx /= steps;
         dy /= steps;
 

@@ -13,13 +13,13 @@ public static class Day13
         Point foldPoint = foldInstructions[0];
 
         Point[] movedPoints = points
-            .Where(p => p.x >= foldPoint.x && p.y >= foldPoint.y)
+            .Where(p => p.X >= foldPoint.X && p.Y >= foldPoint.Y)
             .ToArray();
 
         foreach (Point point in movedPoints)
         {
             points.Remove(point);
-            points.Add(new Point(Math.Abs(2 * foldPoint.x - point.x), Math.Abs(2 * foldPoint.y - point.y)));
+            points.Add(new Point(Math.Abs(2 * foldPoint.X - point.X), Math.Abs(2 * foldPoint.Y - point.Y)));
         }
         Console.WriteLine(points.Count);
     }
@@ -67,19 +67,6 @@ public static class Day13
             int.Parse(pointAsString[(delimIndex + 1)..]));
     }
 
-    [System.Diagnostics.DebuggerDisplay("({x}, {y})")]
-    private struct Point
-    {
-        public readonly int x;
-        public readonly int y;
-
-        public Point(int x, int y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
     public static void Part2()
     {
 
@@ -94,13 +81,13 @@ public static class Day13
             Point foldPoint = foldInstructions[i];
 
             Point[] movedPoints = points
-                .Where(p => p.x >= foldPoint.x && p.y >= foldPoint.y)
+                .Where(p => p.X >= foldPoint.X && p.Y >= foldPoint.Y)
                 .ToArray();
 
             foreach (Point point in movedPoints)
             {
                 points.Remove(point);
-                points.Add(new Point(Math.Abs(2 * foldPoint.x - point.x), Math.Abs(2 * foldPoint.y - point.y)));
+                points.Add(new Point(Math.Abs(2 * foldPoint.X - point.X), Math.Abs(2 * foldPoint.Y - point.Y)));
             }
         }
 
@@ -108,21 +95,21 @@ public static class Day13
         int maxY = 0;
         foreach (var point in points)
         {
-            if (point.x > maxX)
+            if (point.X > maxX)
             {
-                maxX = point.x;
+                maxX = point.X;
             }
 
-            if (point.y > maxY)
+            if (point.Y > maxY)
             {
-                maxY = point.y;
+                maxY = point.Y;
             }
         }
 
         bool[,] pointMap = new bool[maxX + 1, maxY + 1];
         foreach (var point in points)
         {
-            pointMap[point.x, point.y] = true;
+            pointMap[point.X, point.Y] = true;
         }
 
         for (int y = 0; y <= maxY; y++)
