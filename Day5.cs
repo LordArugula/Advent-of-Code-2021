@@ -14,18 +14,18 @@ public static class Day5
             int firstSep = inputAsSpan.IndexOf(' ');
             int lastSep = inputAsSpan.LastIndexOf(' ');
 
-            ReadOnlySpan<char> pointASpan = inputAsSpan.Slice(0, firstSep);
-            ReadOnlySpan<char> pointBSpan = inputAsSpan.Slice(lastSep + 1);
+            ReadOnlySpan<char> pointASpan = inputAsSpan[..firstSep];
+            ReadOnlySpan<char> pointBSpan = inputAsSpan[(lastSep + 1)..];
 
             int sepAIndex = pointASpan.IndexOf(',');
             int sepBIndex = pointBSpan.IndexOf(',');
 
             return new LineSegment
             {
-                a = new Point(int.Parse(pointASpan.Slice(0, sepAIndex)),
-                    int.Parse(pointASpan.Slice(sepAIndex + 1))),
-                b = new Point(int.Parse(pointBSpan.Slice(0, sepBIndex)),
-                    int.Parse(pointBSpan.Slice(sepBIndex + 1)))
+                a = new Point(int.Parse(pointASpan[..sepAIndex]),
+                    int.Parse(pointASpan[(sepAIndex + 1)..])),
+                b = new Point(int.Parse(pointBSpan[..sepBIndex]),
+                    int.Parse(pointBSpan[(sepBIndex + 1)..]))
             };
         }
 

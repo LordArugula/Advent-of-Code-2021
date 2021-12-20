@@ -127,7 +127,7 @@ public static class Day17
 
     private static int OongaBoongaBruteForceCountSuccessfulInitialVelocities(Bounds bounds, int count)
     {
-        for (int x = -1000; x < 1000; x++)
+        for (int x = 0; x < 1000; x++)
         {
             for (int y = -1000; y < 1000; y++)
             {
