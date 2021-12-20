@@ -16,7 +16,7 @@ public static class Day20
             EnhanceImage(image, algorithmString);
         }
 
-        int litPixelCount = CountLitPixels(image);
+        int litPixelCount = CountLitPixels(image, enhancementSteps);
         Console.WriteLine(litPixelCount);
     }
 
@@ -37,13 +37,13 @@ public static class Day20
         Console.WriteLine();
     }
 
-    private static char[,] ReadImage(string[] inputs, int enhancementSteps)
+    private static char[,] ReadImage(string[] inputs, int marginSize)
     {
         int height = inputs.Length - 2;
         int width = inputs[2].Length;
 
-        enhancementSteps++;
-        int margins = 2 * enhancementSteps;
+        marginSize = marginSize * 2 + 1;
+        int margins = 4 * marginSize;
         char[,] image = new char[width + margins, height + margins];
 
         for (int x = 0; x < image.GetLength(0); x++)
@@ -58,7 +58,7 @@ public static class Day20
         {
             for (int y = 0; y < width; y++)
             {
-                image[x + enhancementSteps, y + enhancementSteps] = inputs[x + 2][y];
+                image[x + marginSize, y + marginSize] = inputs[x + 2][y];
             }
         }
 
@@ -115,16 +115,16 @@ public static class Day20
         return new string(binaryString);
     }
 
-    private static int CountLitPixels(char[,] twoEnhanceStepImage)
+    private static int CountLitPixels(char[,] twoEnhanceStepImage, int marginSize)
     {
         int count = 0;
 
         int height = twoEnhanceStepImage.GetLength(0);
         int width = twoEnhanceStepImage.GetLength(1);
 
-        for (int x = 1; x < height - 1; x++)
+        for (int x = marginSize; x < height - marginSize; x++)
         {
-            for (int y = 1; y < width - 1; y++)
+            for (int y = marginSize; y < width - marginSize; y++)
             {
                 if (twoEnhanceStepImage[x, y] == '#')
                 {
@@ -148,9 +148,8 @@ public static class Day20
         {
             EnhanceImage(image, algorithmString);
         }
-        PrintImage(image);
 
-        int litPixelCount = CountLitPixels(image);
+        int litPixelCount = CountLitPixels(image, enhancementSteps);
         Console.WriteLine(litPixelCount);
     }
 }
