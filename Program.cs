@@ -1,4 +1,4 @@
 ﻿using AdventOfCode2021;
 
-Day14.Part1();
-Day14.Part2();
+Day21.Part1();
+Day21.Part2();
