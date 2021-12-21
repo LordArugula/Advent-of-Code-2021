@@ -5,45 +5,33 @@ public static class Day21
     public static void Part1()
     {
         string[] inputs = InputHelper.GetInput(21);
-        int player1Position = ParseStartingPosition(inputs[0]);
-        int player2Position = ParseStartingPosition(inputs[1]);
 
-        int player1Score = 0;
-        int player2Score = 0;
+        DiracPlayer player1 = new DiracPlayer(ParseStartingPosition(inputs[0]), 0);
+        DiracPlayer player2 = new DiracPlayer(ParseStartingPosition(inputs[1]), 0);
 
         int dieRolls = 0;
         while (true)
         {
-            player1Position += Roll3Die(dieRolls);
-            while (player1Position > 10)
-            {
-                player1Position -= 10;
-            }
-
-            player1Score += player1Position;
+            player1.Position += Roll3Die(dieRolls);
+            player1.Score += player1.Position;
             dieRolls += 3;
 
-            if (player1Score >= 1000)
+            if (player1.Score >= 1000)
             {
                 break;
             }
 
-            player2Position += Roll3Die(dieRolls);
-            while (player2Position > 10)
-            {
-                player2Position -= 10;
-            }
-
-            player2Score += player2Position;
+            player2.Position += Roll3Die(dieRolls);
+            player2.Score += player2.Position;
             dieRolls += 3;
 
-            if (player2Score >= 1000)
+            if (player2.Score >= 1000)
             {
                 break;
             }
         }
 
-        Console.WriteLine(Math.Min(player1Score, player2Score) * dieRolls);
+        Console.WriteLine(Math.Min(player1.Score, player2.Score) * dieRolls);
     }
 
     private static int Roll3Die(int dieRolls)
@@ -71,6 +59,32 @@ public static class Day21
         ReadOnlySpan<char> span = input.AsSpan();
         int index = span.LastIndexOf(' ') + 1;
         return int.Parse(span[index..]);
+    }
+
+    public class DiracPlayer
+    {
+        private int position;
+
+        public int Position
+        {
+            get => position;
+            set
+            {
+                position = value;
+                while (position > 10)
+                {
+                    position -= 10;
+                }
+            }
+        }
+
+        public int Score { get; set; }
+
+        public DiracPlayer(int position, int score)
+        {
+            Position = position;
+            Score = score;
+        }
     }
 
     public static void Part2()
