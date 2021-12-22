@@ -11,7 +11,12 @@ public static class Day13
         ParseInput(inputs, points, foldInstructions);
 
         Point foldPoint = foldInstructions[0];
+        FoldPointsAt(points, foldPoint);
+        Console.WriteLine(points.Count);
+    }
 
+    private static void FoldPointsAt(HashSet<Point> points, Point foldPoint)
+    {
         Point[] movedPoints = points
             .Where(p => p.X >= foldPoint.X && p.Y >= foldPoint.Y)
             .ToArray();
@@ -21,7 +26,6 @@ public static class Day13
             points.Remove(point);
             points.Add(new Point(Math.Abs(2 * foldPoint.X - point.X), Math.Abs(2 * foldPoint.Y - point.Y)));
         }
-        Console.WriteLine(points.Count);
     }
 
     private static void ParseInput(string[] inputs, HashSet<Point> points, List<Point> foldInstructions)
@@ -69,7 +73,6 @@ public static class Day13
 
     public static void Part2()
     {
-
         string[] inputs = InputHelper.GetInput(13);
 
         HashSet<Point> points = new HashSet<Point>();
@@ -80,17 +83,14 @@ public static class Day13
         {
             Point foldPoint = foldInstructions[i];
 
-            Point[] movedPoints = points
-                .Where(p => p.X >= foldPoint.X && p.Y >= foldPoint.Y)
-                .ToArray();
-
-            foreach (Point point in movedPoints)
-            {
-                points.Remove(point);
-                points.Add(new Point(Math.Abs(2 * foldPoint.X - point.X), Math.Abs(2 * foldPoint.Y - point.Y)));
-            }
+            FoldPointsAt(points, foldPoint);
         }
 
+        PrintPoints(points);
+    }
+
+    private static void PrintPoints(HashSet<Point> points)
+    {
         int maxX = 0;
         int maxY = 0;
         foreach (var point in points)
